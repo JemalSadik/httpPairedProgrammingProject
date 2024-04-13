@@ -4,7 +4,7 @@ The goal of the Paired Programming Project is to create a basic user/item manage
 
 ## Requirements
 
-This project uses Java 17.0.10 with Spring 3.2.4 for the Web Framework, Maven for dependency management and PostgreSQL 16 for the database. This project uses the following dependancies:
+This project uses Java 17.0.10 with Spring Boot 3.2.4 for the Web Framework, Maven for dependency management and PostgreSQL 16 for the database. This project uses the following dependancies:
 
 ### Dependencies
 
