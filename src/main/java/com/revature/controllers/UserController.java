@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -35,15 +36,23 @@ public class UserController {
     // patching partial change is not working
     @PatchMapping("/{userId}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable int userId) {
-        if (userId > 0) {
-            Optional<User> u = userDAO.findById(userId);
+        Optional<User> existingUser = userDAO.findById(userId);
 
-            if (u.isEmpty()) {
-                return ResponseEntity.internalServerError().build();
+        if (existingUser.isPresent()) {
+            User u = existingUser.get();
+            // update username if not empty or null
+            if (!Objects.equals(user.getUsername(), "") && user.getUsername() != null) {
+                u.setUsername(user.getUsername());
             }
-            userDAO.save(user);
-            return ResponseEntity.status(201).body(user);
+            // update password if not empty or null
+            if (!Objects.equals(user.getPassword(), "") && user.getPassword() != null) {
+                u.setPassword(user.getPassword());
+            }
+            // Save updated user and return response
+            userDAO.save(u);
+            return ResponseEntity.ok(u);
         }
+        // user at userId was not found
         return ResponseEntity.notFound().build();
     }
 
@@ -66,9 +75,9 @@ public class UserController {
     }
 
     // get user by username and password
-    @GetMapping("/find/{up}")
-    public ResponseEntity<User> getUserByUsernameAndPassword(@PathVariable String up, @RequestBody String password) {
-        User u = userDAO.findByUsernameAndPassword(up, password);
+    @GetMapping("/find/{username}")
+    public ResponseEntity<User> getUserByUsernameAndPassword(@PathVariable String username, @RequestBody String password) {
+        User u = userDAO.findByUsernameAndPassword(username, password);
 
         if (u == null) {
             return ResponseEntity.internalServerError().build();
