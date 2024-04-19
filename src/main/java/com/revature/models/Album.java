@@ -24,7 +24,7 @@ public class Album {
     @Column(nullable = false)
     private float runTime;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "userId")
     private User user;
 
