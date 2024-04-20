@@ -71,7 +71,7 @@ public class UserController {
         if (u == null) {
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.status(201).body(u);
+        return ResponseEntity.ok(u);
     }
 
     // get user by username and password
